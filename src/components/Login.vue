@@ -1,5 +1,7 @@
 <template>
   <div class="login_container">
+    <div class="glass"></div>
+    <div class="glass-shadow"></div>
     <div class="login_box">
       <div class="avatar_box">
         <img src="../assets/logo.png" alt="" />
@@ -18,7 +20,8 @@
             show-password
             v-model="loginForm.password"
             prefix-icon="el-icon-lock"
-            placeholder="请输入密码"/>
+            placeholder="请输入密码"
+            @keyup.native.enter="submitForm('loginForm')"/>
         </el-form-item>
         <el-form-item class="button_box">
           <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
@@ -106,12 +109,36 @@
 <style lang="css" scoped>
   .login_container {
     height: 100%;
-    background-color: #2B4B6B;
+    /*background-color: #2B4B6B;*/
+    background-image: url("../assets/background.jpg");
+    background-position: center;
+    background-size: cover;
+  }
+  .glass {
+    width: 450px;
+    height: 300px;
+    filter: blur(7px);
+    background-image: url("../assets/background.jpg");
+    background-position: center;
+    background-size: 100vw 100vh;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .glass-shadow {
+    width: 450px;
+    height: 300px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
   }
   .login_box {
     width: 450px;
     height: 300px;
-    background-color: white;
     border-radius: 3px;
     position: absolute;
     left: 50%;
