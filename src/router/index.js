@@ -6,6 +6,7 @@ import Workbench from '@/components/Workbench'
 import Users from '@/components/user/Users'
 import Permissions from '@/components/permisson/Permissions'
 import Roles from '@/components/permisson/Roles'
+import Categories from '@/components/goods/Categories'
 
 Vue.use(VueRouter)
 
@@ -26,7 +27,8 @@ const routes = [
       { path: 'workbench', component: Workbench },
       { path: 'users', component: Users },
       { path: 'rights', component: Permissions },
-      { path: 'roles', component: Roles }
+      { path: 'roles', component: Roles },
+      { path: 'categories', component: Categories }
     ]
   }
 ]
