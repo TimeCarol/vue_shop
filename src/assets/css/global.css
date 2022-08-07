@@ -3,6 +3,22 @@ html, body, #app {
     margin: 0;
     padding: 0;
 }
+/* 修改滚动条 */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 10px;
+}
+/* 滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+    background-color: rgb(234, 237, 241);
+    border-radius: 3px;
+}
+/* 修改全局的滚动条 */
+/* 滚动条的宽度 */
+::-webkit-scrollbar {
+    width: 5px; /*竖向*/
+    height: 5px; /*横向*/
+}
 .el-card {
     margin-top: 15px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, .2);

@@ -30,6 +30,7 @@
         :data="userList"
         border
         stripe
+        :height="height"
         :header-cell-style="{'text-align': 'center', 'background-color': '#F5F7FA'}"
         :cell-style="{'text-align': 'center'}"
         style="width: 100%">
@@ -60,7 +61,7 @@
             </div>
             <!-- 分配角色按钮 -->
             <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" size="small" icon="el-icon-setting"></el-button>
+              <el-button type="warning" size="small" icon="el-icon-setting" @click="setRole(row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -118,6 +119,30 @@
         <el-button type="primary" @click="submitEditForm('editForm')">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 分配角色的对话框 -->
+    <el-dialog title="分配角色" :visible.sync="setRoleDialogVisible" :close-on-click-modal="false" @close="closeRoleDialog('roleForm')">
+      <!-- 内容主体区-->
+      <el-form :model="userInfo" label-position="right" label-width="70px" :rules="userRules" ref="roleForm">
+        <el-form-item label="用户名">
+          <el-input v-model="userInfo.username" autocomplete="off" clearable disabled></el-input>
+        </el-form-item>
+        <el-form-item label="新角色">
+          <el-select v-model="userInfo.roleId" placeholder="请选择角色">
+            <el-option
+              v-for="role in roleList"
+              :key="role.id"
+              :label="role.roleName"
+              :value="role.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <!-- 底部区 -->
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="setRoleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitRoleForm('roleForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -152,11 +177,14 @@
         },
         userList: [],
         total: 0,
+        //表格高度
+        height: 600,
         //控制添加用户对话框的显示与隐藏
         addDialogVisible: false,
         userInfo: {
           id: 0,
           username: '',
+          roleId: 0,
           password: '',
           email: '',
           mobile: ''
@@ -181,7 +209,9 @@
           ]
         },
         //控制修改对话框的显示与隐藏
-        editDialogVisible: false
+        editDialogVisible: false,
+        setRoleDialogVisible: false,
+        roleList: []
       }
     },
     methods: {
@@ -308,6 +338,7 @@
         this.userInfo = {
           id: 0,
           username: '',
+          roleId: 0,
           password: '',
           email: '',
           mobile: ''
@@ -334,10 +365,72 @@
         )
         //关闭删除弹出框
         this.closeDeleteWindow(`popover-${id}`)
+      },
+      //展示分配角色的对话框
+      setRole(user) {
+        this.setRoleList()
+        this.setRoleDialogVisible = true
+        this.userInfo.id = user.id
+        this.userInfo.username = user.username
+        this.roleList.forEach(role => {
+          if (role.roleName === user.role_name) {
+            this.userInfo.roleId = role.id
+          }
+        })
+      },
+      //关闭分配角色对话框
+      closeRoleDialog(formName) {
+        this.setRoleDialogVisible = false
+        this.$refs[formName].resetFields()
+        this.userInfo = {
+          id: 0,
+          username: '',
+          roleId: 0,
+          password: '',
+          email: '',
+          mobile: ''
+        }
+      },
+      //点击按钮分配角色
+      submitRoleForm(formName) {
+        this.$http.put(`users/${this.userInfo.id}/role`, { rid: this.userInfo.roleId }).then(
+          response => {
+            if (response.data.meta.status !== 200) {
+              this.$message.error(response.data.meta.msg)
+            } else {
+              this.closeRoleDialog(formName)
+              this.$message.success(response.data.meta.msg)
+              this.getUserList()
+            }
+          },
+          error => {
+            this.$message.error(error.message)
+          }
+        )
+      },
+      //设置用户角色列表
+      setRoleList() {
+        this.$http.get('roles').then(
+          response =>{
+            if (response.data.meta.status !== 200) {
+              this.$message.error(response.data.meta.msg)
+            } else {
+              this.roleList = response.data.data
+            }
+          },
+          error => {
+            this.$message.error(error.message)
+          }
+        )
       }
     },
     created () {
       this.getUserList()
+      window.onresize = () => {
+        this.height = document.documentElement.clientHeight || document.body.clientHeight
+        this.height -= 290
+      }
+      window.onresize()
     }
   }
 </script>
