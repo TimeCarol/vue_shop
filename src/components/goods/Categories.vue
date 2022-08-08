@@ -40,7 +40,7 @@
               <!-- 删除按钮 -->
               <div style="display: inline-block; margin: 0 6px">
                 <el-popover :ref="`popover-${scope.row.cat_id}`">
-                  <p>是否确定删除？</p>
+                  <p>是否确定删除? </p>
                   <div style="text-align: right; margin: 0">
                     <el-button size="mini" type="text" @click="closeDeleteWindow(`popover-${scope.row.cat_id}`)">取消</el-button>
                     <el-button type="primary" size="mini" @click="deleteCategory(scope.row.cat_id)">确定</el-button>
