@@ -17,7 +17,7 @@
       </div>
       <!-- 侧边栏菜单区 -->
       <el-menu
-        :default-active="$route.path.split('/').pop()"
+        :default-active="'/home/' + $route.path.split('/').pop()"
         :collapse="isCollapse"
         :collapse-transition="false"
         class="el-menu-vertical-demo"
@@ -37,9 +37,9 @@
             <!-- 标题 -->
             <span>{{menu.authName}}</span>
           </template>
-          <!-- 一级菜单 -->
+          <!-- 二级菜单 -->
           <el-menu-item
-            :index="children.path"
+            :index="'/home/' + children.path"
             v-for="children in menu.children">
             {{children.authName}}
           </el-menu-item>
